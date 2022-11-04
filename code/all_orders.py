@@ -310,7 +310,6 @@ if __name__ == '__main__':
                     
                 print('The order has been saved in the file order.txt')
                 f.close()
-            graphing_ingredients_week(total_ingredients, weekly_ing, w)
         elif wish == 'n':
             exit()
         else:
