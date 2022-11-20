@@ -51,7 +51,7 @@ def transform(orders: pd.DataFrame, df_orders: pd.DataFrame, df_ingredients: pd.
 
 
     # data quality check
-    print('Data quality check:')
+    '''print('Data quality check:')
     print('Number of nulls in orders:',orders.isnull().sum().sum())
     print('Number of nulls in df_orders:',df_orders.isnull().sum().sum())
     print('Number of nulls per column in...')
@@ -60,7 +60,7 @@ def transform(orders: pd.DataFrame, df_orders: pd.DataFrame, df_ingredients: pd.
         print(ds_name.upper() + ':')
         for column in ds.columns:
             print('\t- ',column,':',ds[column].isnull().sum())
-
+    '''
     df_orders = df_orders[df_orders['date'].isnull() == False]
     df_orders.sort_values(by=['date','order_id'], inplace=True)
     orders = orders[orders['pizza_id'].isnull() == False]
@@ -214,10 +214,17 @@ def graphing_ingredients_week(total_ingredients: list, weekly_ing: list, week: i
     plt.figure(figsize=(10,14))
     plt.xlabel('Weeks')
     plt.ylabel('Quantity')
+    plt.title('Ingredients to order in week {}'.format(week))
     x = np.array(total_ingredients)
     y = np.array([weekly_ing[i][week] for i in total_ingredients])
+    order = {}
+    for i in range(len(x)):
+        order[x[i]] = y[i]
+    order = sorted(order.items(), key=lambda x: x[1], reverse=False)
+    x = [i[0] for i in order]
+    y = [i[1] for i in order]
     plt.barh(x, y, color='green')
-    plt.show()
+    plt.savefig(f'resources_created/week_{week}.png')
 
 
 def prediction_week(total_ingredients: list, ingredients_w: list):
@@ -259,10 +266,11 @@ def prediction_week(total_ingredients: list, ingredients_w: list):
 
     # Graph of stock of one random ingredient
     plt.figure(figsize=(14,5))
-    plt.title('Ingredients per week')
+    
     plt.xlabel('Weeks')
     plt.ylabel('Quantity')
     ing = total_ingredients[ing]
+    plt.title(f'{ing}\' stock over the weeks')
     x = np.array(range(len(ingredients_w)))
     y = np.array([ingredients_w[i][ing] for i in range(len(ingredients_w))])
     plt.ylim(0, y.max()*1.7)
@@ -270,7 +278,7 @@ def prediction_week(total_ingredients: list, ingredients_w: list):
     plt.plot(x, y, label=ing)
 
     plt.legend()
-    plt.show()
+    plt.savefig(f'resources_created/{ing}.png')
     weekly_ing.set_index('week', inplace=True)
     weekly_ing.to_csv('resources_created/weekly_ing.csv')
 
@@ -281,6 +289,7 @@ if __name__ == '__main__':
     pizza_orders, total_ingredients, ingredients_w  = transform(orders, df_orders, df_ingredients, df_pizzas)
     all_orders, total_ingredients, ingredients_w = merge_data(pizza_orders, total_ingredients, ingredients_w)
     weekly_ing = load(all_orders, total_ingredients, ingredients_w)
+    graphing_ingredients_week(total_ingredients, weekly_ing, 104)
     os.system('clear||cls')
     wish = ''
     while wish != 'y' or wish != 'n':

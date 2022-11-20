@@ -1,6 +1,8 @@
 import pandas as pd
 import os
 import numpy as np
+import warnings
+warnings.filterwarnings('ignore')
 
 def main():
     orders = pd.read_csv('data/order_details.csv')
@@ -92,3 +94,5 @@ def main():
 
     return pizza_orders
 
+if __name__ == '__main__':
+    print(main())
