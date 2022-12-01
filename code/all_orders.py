@@ -23,10 +23,10 @@ signal.signal(signal.SIGINT, handle_exit)
 # ETL 
 def extract():
 
-    orders = pd.read_csv('data/orders_formatted/order_details.csv', sep=';')
-    df_orders = pd.read_csv('data/orders_formatted/orders.csv', sep=';')
-    df_ingredients = pd.read_csv('data/pizza_types.csv',encoding = "ISO-8859-1")
-    df_pizzas = pd.read_csv('data/pizzas.csv')
+    orders = pd.read_csv('code/data/orders_formatted/order_details.csv', sep=';')
+    df_orders = pd.read_csv('code/data/orders_formatted/orders.csv', sep=';')
+    df_ingredients = pd.read_csv('code/data/pizza_types.csv',encoding = "ISO-8859-1")
+    df_pizzas = pd.read_csv('code/data/pizzas.csv')
 
 
     # dtypes of each dataset to json
@@ -36,7 +36,7 @@ def extract():
     dtypes = {'dtypes': {}}
     for dataset in range(len(df_list)):
         dtypes['dtypes'][df_names[dataset]] = df_list[dataset].dtypes.apply(lambda x: types[x.name]).to_dict()
-    json.dump(dtypes, open('resources_created/dtypes.json', 'w'))
+    #json.dump(dtypes, open('resources_created/dtypes.json', 'w'))
 
     return orders, df_orders, df_ingredients, df_pizzas
 
@@ -48,19 +48,7 @@ def transform(orders: pd.DataFrame, df_orders: pd.DataFrame, df_ingredients: pd.
             df_orders['date'][date] = pd.to_datetime(df_orders['date'][date], errors='ignore').date()
         except:
             df_orders['date'][date] = datetime.fromtimestamp(float(df_orders['date'][date])).date()
-
-
-    # data quality check
-    '''print('Data quality check:')
-    print('Number of nulls in orders:',orders.isnull().sum().sum())
-    print('Number of nulls in df_orders:',df_orders.isnull().sum().sum())
-    print('Number of nulls per column in...')
-    datas = {'orders': orders, 'df_orders': df_orders}
-    for ds_name, ds in datas.items():
-        print(ds_name.upper() + ':')
-        for column in ds.columns:
-            print('\t- ',column,':',ds[column].isnull().sum())
-    '''
+    
     df_orders = df_orders[df_orders['date'].isnull() == False]
     df_orders.sort_values(by=['date','order_id'], inplace=True)
     orders = orders[orders['pizza_id'].isnull() == False]
@@ -165,7 +153,7 @@ def transform(orders: pd.DataFrame, df_orders: pd.DataFrame, df_ingredients: pd.
     return pizza_orders, total_ingredients, ingredients_w
     
 def load(pizza_orders, total_ingredients, ingredients_w):
-    pizza_orders.to_csv('resources_created/pizza_orders.csv')
+    pizza_orders.to_csv('code/resources_created/pizza_orders.csv')
     weekly_ing = prediction_week(total_ingredients, ingredients_w)
     return weekly_ing
 
@@ -211,7 +199,7 @@ def ingredients_per_week(pizza_orders: pd.DataFrame):
 
 def graphing_ingredients_week(total_ingredients: list, weekly_ing: list, week: int):
     # graph of ingredients per week
-    plt.figure(figsize=(10,14))
+    plt.figure(figsize=(30,42))
     plt.xlabel('Weeks')
     plt.ylabel('Quantity')
     plt.title('Ingredients to order in week {}'.format(week))
@@ -224,7 +212,7 @@ def graphing_ingredients_week(total_ingredients: list, weekly_ing: list, week: i
     x = [i[0] for i in order]
     y = [i[1] for i in order]
     plt.barh(x, y, color='green')
-    plt.savefig(f'resources_created/week_{week}.png')
+    plt.savefig(f'code/resources_created/week_{week}.png')
 
 
 def prediction_week(total_ingredients: list, ingredients_w: list):
@@ -278,9 +266,9 @@ def prediction_week(total_ingredients: list, ingredients_w: list):
     plt.plot(x, y, label=ing)
 
     plt.legend()
-    plt.savefig(f'resources_created/{ing}.png')
+    plt.savefig(f'code/resources_created/{ing}.png')
     weekly_ing.set_index('week', inplace=True)
-    weekly_ing.to_csv('resources_created/weekly_ing.csv')
+    weekly_ing.to_csv('code/resources_created/weekly_ing.csv')
 
     return weekly_ing
 

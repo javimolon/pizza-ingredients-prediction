@@ -1,1 +1,0 @@
-{"dtypes": {"order_details.csv": {"order_details_id": "int", "order_id": "int", "pizza_id": "str", "quantity": "str"}, "orders.csv": {"order_id": "int", "date": "str", "time": "str"}, "pizza_types.csv": {"pizza_type_id": "str", "name": "str", "category": "str", "ingredients": "str"}, "pizzas.csv": {"pizza_id": "str", "pizza_type_id": "str", "size": "str", "price": "float"}}}

@@ -5,10 +5,10 @@ import warnings
 warnings.filterwarnings('ignore')
 
 def main():
-    orders = pd.read_csv('data/order_details.csv')
-    df_orders = pd.read_csv('data/orders_original.csv')
-    df_ingredients = pd.read_csv('data/pizza_types.csv',encoding = "ISO-8859-1")
-    df_pizzas = pd.read_csv('data/pizzas.csv')
+    orders = pd.read_csv('code/data/order_details.csv')
+    df_orders = pd.read_csv('code/data/orders_original.csv')
+    df_ingredients = pd.read_csv('code/data/pizza_types.csv',encoding = "ISO-8859-1")
+    df_pizzas = pd.read_csv('code/data/pizzas.csv')
 
 
 
