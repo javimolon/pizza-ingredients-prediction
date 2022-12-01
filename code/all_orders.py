@@ -8,6 +8,7 @@ import random
 import matplotlib.pyplot as plt
 warnings.filterwarnings('ignore')
 
+# HANDLING THE CTR+C SIGNAL
 def handle_exit(signal, frame):
     
     print('Exiting', end='', flush=True)
@@ -22,7 +23,8 @@ signal.signal(signal.SIGINT, handle_exit)
 
 # ETL 
 def extract():
-
+    # We read the data from the different csv files.
+    # To know more about the data, check the README.md file
     orders = pd.read_csv('code/data/orders_formatted/order_details.csv', sep=';')
     df_orders = pd.read_csv('code/data/orders_formatted/orders.csv', sep=';')
     df_ingredients = pd.read_csv('code/data/pizza_types.csv',encoding = "ISO-8859-1")
@@ -223,8 +225,12 @@ def prediction_week(total_ingredients: list, ingredients_w: list):
 
     # For plotting a random ingredient
     x_axis = np.array(range(len(ingredients_w)))
-    stock_ing = []
-    ing = random.randint(0, len(total_ingredients)-1)
+    stock_ing1 = []
+    stock_ing2 = []
+    stock_ing3 = []
+    ing1 = random.randint(0, len(total_ingredients)-1)
+    ing2 = random.randint(0, len(total_ingredients)-1)
+    ing3 = random.randint(0, len(total_ingredients)-1)
 
     weekly_ing = pd.DataFrame()
     weekly_ing['week'] = range(len(ingredients_w))
@@ -249,36 +255,70 @@ def prediction_week(total_ingredients: list, ingredients_w: list):
             
             # For graphing
             weekly_ing[total_ingredients[i]][week] = round(stock[total_ingredients[i]][1]*p)
-            if i == ing:
-                stock_ing.append(stock[total_ingredients[ing]][0])
+            if i == ing1:
+                stock_ing1.append(stock[total_ingredients[ing1]][0])
+            if i == ing2:
+                stock_ing2.append(stock[total_ingredients[ing2]][0])
+            if i == ing3:
+                stock_ing3.append(stock[total_ingredients[ing3]][0])
 
     # Graph of stock of one random ingredient
     plt.figure(figsize=(14,5))
     
     plt.xlabel('Weeks')
     plt.ylabel('Quantity')
-    ing = total_ingredients[ing]
-    plt.title(f'{ing}\' stock over the weeks')
+    ing1 = total_ingredients[ing1]
+    plt.title(f'{ing1}\' stock over the weeks')
     x = np.array(range(len(ingredients_w)))
-    y = np.array([ingredients_w[i][ing] for i in range(len(ingredients_w))])
+    y = np.array([ingredients_w[i][ing1] for i in range(len(ingredients_w))])
     plt.ylim(0, y.max()*1.7)
-    plt.plot(x_axis, stock_ing, label=f'stock of {ing}')
-    plt.plot(x, y, label=ing)
-
+    plt.plot(x_axis, stock_ing1, label=f'stock of {ing1}')
+    plt.plot(x, y, label=ing1)
     plt.legend()
-    plt.savefig(f'code/resources_created/{ing}.png')
+    plt.savefig(f'code/resources_created/{ing1}.png')
+
+
+    plt.xlabel('Weeks')
+    plt.ylabel('Quantity')
+    ing2 = total_ingredients[ing2]
+    plt.title(f'{ing2}\' stock over the weeks')
+    x = np.array(range(len(ingredients_w)))
+    y = np.array([ingredients_w[i][ing2] for i in range(len(ingredients_w))])
+    plt.ylim(0, y.max()*1.7)
+    plt.plot(x_axis, stock_ing2, label=f'stock of {ing2}')
+    plt.plot(x, y, label=ing2)
+    plt.legend()
+    plt.savefig(f'code/resources_created/{ing2}.png')
+
+
+    plt.xlabel('Weeks')
+    plt.ylabel('Quantity')
+    ing3 = total_ingredients[ing3]
+    plt.title(f'{ing3}\' stock over the weeks')
+    x = np.array(range(len(ingredients_w)))
+    y = np.array([ingredients_w[i][ing3] for i in range(len(ingredients_w))])
+    plt.ylim(0, y.max()*1.7)
+    plt.plot(x_axis, stock_ing3, label=f'stock of {ing3}')
+    plt.plot(x, y, label=ing3)
+    plt.legend()
+    plt.savefig(f'code/resources_created/{ing3}.png')
+
+
     weekly_ing.set_index('week', inplace=True)
     weekly_ing.to_csv('code/resources_created/weekly_ing.csv')
 
     return weekly_ing
 
 if __name__ == '__main__':
+    os.mkdir('code/resources_created') if not os.path.exists('code/resources_created') else None
     orders, df_orders, df_ingredients, df_pizzas = extract()
     pizza_orders, total_ingredients, ingredients_w  = transform(orders, df_orders, df_ingredients, df_pizzas)
     all_orders, total_ingredients, ingredients_w = merge_data(pizza_orders, total_ingredients, ingredients_w)
     weekly_ing = load(all_orders, total_ingredients, ingredients_w)
     graphing_ingredients_week(total_ingredients, weekly_ing, 104)
     os.system('clear||cls')
+
+    # Get the prediction for a week in 2015 or 2016
     wish = ''
     while wish != 'y' or wish != 'n':
         wish = input('Do you wish to know what to order for the next week (y/n)? ')
@@ -286,13 +326,15 @@ if __name__ == '__main__':
             print('What is today\'s date?')
             date = input('Enter a date in the format YYYY-MM-DD: ')
             
+            # If the year is 2015 or 2016, we can predict, if not, we can't
             if date.split('-')[0] != '2015' and date.split('-')[0] != '2016':
                 print('Year not valid')
                 continue
-          
+            # If the date is not valid, we can't predict
             try:
                 date = datetime.strptime(date, '%Y-%m-%d')
             except:
+
                 print('Wrong date format')
                 continue
 
