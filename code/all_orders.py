@@ -269,39 +269,41 @@ def prediction_week(total_ingredients: list, ingredients_w: list):
     ing1 = total_ingredients[ing1]
     plt.title(f'{ing1}\' stock over the weeks')
     x = np.array(range(len(ingredients_w)))
-    y = np.array([ingredients_w[i][ing1] for i in range(len(ingredients_w))])
-    plt.ylim(0, y.max()*1.7)
+    y1 = np.array([ingredients_w[i][ing1] for i in range(len(ingredients_w))])
+    plt.ylim(0, y1.max()*1.7)
     plt.plot(x_axis, stock_ing1, label=f'stock of {ing1}')
-    plt.plot(x, y, label=ing1)
+    plt.plot(x, y1, label=ing1)
     plt.legend()
     plt.savefig(f'code/resources_created/{ing1}.png')
+    plt.close()
 
-
+    plt.figure(figsize=(14,5))
     plt.xlabel('Weeks')
     plt.ylabel('Quantity')
     ing2 = total_ingredients[ing2]
     plt.title(f'{ing2}\' stock over the weeks')
     x = np.array(range(len(ingredients_w)))
-    y = np.array([ingredients_w[i][ing2] for i in range(len(ingredients_w))])
-    plt.ylim(0, y.max()*1.7)
+    y2 = np.array([ingredients_w[i][ing2] for i in range(len(ingredients_w))])
+    plt.ylim(0, y2.max()*1.7)
     plt.plot(x_axis, stock_ing2, label=f'stock of {ing2}')
-    plt.plot(x, y, label=ing2)
+    plt.plot(x, y2, label=ing2)
     plt.legend()
     plt.savefig(f'code/resources_created/{ing2}.png')
+    plt.close()
 
-
+    plt.figure(figsize=(14,5))
     plt.xlabel('Weeks')
     plt.ylabel('Quantity')
     ing3 = total_ingredients[ing3]
     plt.title(f'{ing3}\' stock over the weeks')
     x = np.array(range(len(ingredients_w)))
-    y = np.array([ingredients_w[i][ing3] for i in range(len(ingredients_w))])
-    plt.ylim(0, y.max()*1.7)
+    y3 = np.array([ingredients_w[i][ing3] for i in range(len(ingredients_w))])
+    plt.ylim(0, y3.max()*1.7)
     plt.plot(x_axis, stock_ing3, label=f'stock of {ing3}')
-    plt.plot(x, y, label=ing3)
+    plt.plot(x, y3, label=ing3)
     plt.legend()
     plt.savefig(f'code/resources_created/{ing3}.png')
-
+    plt.close()
 
     weekly_ing.set_index('week', inplace=True)
     weekly_ing.to_csv('code/resources_created/weekly_ing.csv')
