@@ -9,7 +9,7 @@ pip3 install -r requirements.txt
 ```
 
 ## How to run the code
-To run the code you need to run the following command in your terminal:
+To run the code you need to run the following command in your directory terminal:
 ```bash
 python3 code/all_orders.py
 ```

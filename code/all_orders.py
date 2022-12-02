@@ -3,7 +3,6 @@ import os, sys, time, signal, warnings
 import numpy as np
 from datetime import datetime
 import re
-import json
 import random
 import matplotlib.pyplot as plt
 warnings.filterwarnings('ignore')
