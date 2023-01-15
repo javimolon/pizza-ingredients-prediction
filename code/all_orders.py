@@ -1,5 +1,5 @@
 import pandas as pd
-import os, sys, time, signal, warnings
+import os, sys, time, signal, warnings, json
 import numpy as np
 from datetime import datetime
 import re
@@ -35,9 +35,13 @@ def extract():
     df_list = [orders, df_orders, df_ingredients, df_pizzas]
     df_names = ['order_details.csv', 'orders.csv', 'pizza_types.csv', 'pizzas.csv']
     dtypes = {'dtypes': {}}
+    print('INFORME DE CALIDAD DE DATOS')
     for dataset in range(len(df_list)):
+        print(df_names[dataset]+':')
+        print(df_list[dataset].dtypes)
         dtypes['dtypes'][df_names[dataset]] = df_list[dataset].dtypes.apply(lambda x: types[x.name]).to_dict()
-    #json.dump(dtypes, open('resources_created/dtypes.json', 'w'))
+    file = open('code/resources_created/dtypes.json', 'w')
+    json.dump(dtypes, file)
 
     return orders, df_orders, df_ingredients, df_pizzas
 
