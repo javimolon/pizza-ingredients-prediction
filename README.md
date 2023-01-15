@@ -29,5 +29,6 @@ We offer various results:
 - A csv file with the ingredients we have ordered each week, predicted by our program
 - Three graphs showing the evolution of the quantity of ingredients ordered each week and the stock of ingredients we have each week
 - A barplot showing last week's order 
+- A json file offering the types of data in each column
 
 They are all found in the directory `code/resources_created` 
